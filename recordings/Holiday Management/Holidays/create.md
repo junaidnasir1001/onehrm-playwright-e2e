@@ -1,0 +1,30 @@
+import { test, expect } from '@playwright/test';
+
+test('test', async ({ page }) => {
+  await page.goto('https://v2.onehrm.com.my/login');
+  await page.getByRole('textbox', { name: 'Username' }).click();
+  await page.getByRole('textbox', { name: 'Username' }).fill('pukat-admin');
+  await page.getByRole('textbox', { name: 'Password' }).click();
+  await page.getByRole('textbox', { name: 'Password' }).fill('admin@1234');
+  await page.getByRole('button', { name: 'Login' }).click();
+  await page.getByRole('link', { name: '  Holiday Management' }).click();
+  await page.getByRole('link', { name: ' Holidays' }).click();
+  await page.getByRole('button', { name: ' Add Holiday' }).click();
+  await page.locator('button').filter({ hasText: 'Select Holiday Calendar' }).click();
+  await page.getByRole('combobox', { name: 'Search' }).fill('Federal Ho');
+  await page.locator('#bs-select-1-0').click();
+  await page.getByRole('textbox', { name: 'Name *' }).click();
+  await page.getByRole('textbox', { name: 'Name *' }).fill('Eid');
+  await page.locator('button').filter({ hasText: 'Select Type' }).click();
+  await page.getByRole('combobox', { name: 'Search' }).fill('Pub');
+  await page.locator('#bs-select-2-0').click();
+  await page.getByRole('textbox', { name: 'Start Date *' }).click();
+  await page.getByRole('cell', { name: '18' }).click();
+  await page.getByRole('textbox', { name: 'End Date' }).click();
+  await page.getByRole('cell', { name: '18' }).click();
+  await page.getByRole('textbox', { name: 'Description' }).click();
+  await page.getByRole('textbox', { name: 'Description' }).fill('eid holiday');
+  await page.locator('.custom-control').click();
+  await page.getByRole('button', { name: 'Submit' }).click();
+  await page.getByRole('heading', { name: 'Holiday Created Successfully.' }).click();
+});
