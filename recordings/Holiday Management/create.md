@@ -1,0 +1,33 @@
+import { test, expect } from '@playwright/test';
+
+test('test', async ({ page }) => {
+  await page.goto('https://v2.onehrm.com.my/login');
+  await page.getByRole('textbox', { name: 'Username' }).click();
+  await page.getByRole('textbox', { name: 'Username' }).fill('pukat-admin');
+  await page.getByRole('textbox', { name: 'Password' }).click();
+  await page.getByRole('textbox', { name: 'Password' }).fill('admin@1234');
+  await page.getByRole('button', { name: 'Login' }).click();
+  await page.getByRole('link', { name: '  Holiday Management' }).click();
+  await page.getByRole('link', { name: 'M Holidays Calendar' }).click();
+  await page.getByRole('button', { name: ' Add Holiday Calendar' }).click();
+  await page.getByRole('textbox', { name: 'Name *' }).click();
+  await page.getByRole('textbox', { name: 'Name *' }).fill('new calendars');
+  await page.locator('button').filter({ hasText: 'Select Country' }).click();
+  await page.getByRole('combobox', { name: 'Search' }).click();
+  await page.getByRole('combobox', { name: 'Search' }).fill('pak');
+  await page.locator('#bs-select-1-163').click();
+  await page.getByRole('textbox', { name: 'State *' }).click();
+  await page.getByRole('textbox', { name: 'State *' }).fill('Punjab');
+  await page.locator('button').filter({ hasText: 'Select Timezone' }).click();
+  await page.getByRole('combobox', { name: 'Search' }).fill('asia/karachi');
+  await page.locator('#bs-select-2-6').click();
+  await page.getByRole('textbox', { name: 'Description' }).click();
+  await page.getByRole('textbox', { name: 'Description' }).fill('abc description');
+  await page.getByRole('combobox', { name: 'Select Select Weekend Days' }).click();
+  await page.locator('#bs-select-3-5').click();
+  await page.locator('#bs-select-3-6').click();
+  await page.locator('#bs-select-3-0').click();
+  await page.getByRole('heading', { name: 'Add Holiday Calendar' }).click();
+  await page.getByRole('button', { name: 'Submit' }).click();
+  await page.getByRole('heading', { name: 'Holiday Calendar Created' }).click();
+});

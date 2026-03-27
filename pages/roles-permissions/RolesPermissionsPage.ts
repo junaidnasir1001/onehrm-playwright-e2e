@@ -102,22 +102,17 @@ export class RolesPermissionsPage extends BasePage {
 
     /**
      * Search for and select an employee in the assign-role modal dropdown.
+     * Uses global Bootstrap Select helper inherited from BasePage.
      *
-     * Bootstrap Select creates TWO role="listbox" elements:
-     *   1) The hidden native <select> → found first by getByRole('listbox')
-     *   2) Bootstrap's custom <ul role="listbox"> → found last
-     * We use .last() to target only the custom dropdown.
-     *
-     * After selecting, the Bootstrap overlay stays open and blocks Submit.
+     * After selecting, the Bootstrap overlay sometimes stays open and blocks Submit.
      * Clicking the modal heading dismisses it (mirrors original recording).
      */
     async selectEmployee(searchTerm: string, employeeName: string): Promise<void> {
-        await this.click(this.page.getByRole('combobox', { name: 'Select Employee' }));
-        await this.fill(this.page.getByRole('combobox', { name: 'Search' }), searchTerm);
-
-        // Target Bootstrap's rendered listbox (last), not the hidden native <select> (first)
-        const bootstrapListbox = this.page.getByRole('listbox').last();
-        await this.click(bootstrapListbox.getByRole('option', { name: new RegExp(employeeName) }).first());
+        await this.selectBootstrapOption(
+            this.page.getByRole('combobox', { name: 'Select Employee' }),
+            searchTerm,
+            employeeName
+        );
 
         // Dismiss the open Bootstrap dropdown overlay so Submit is no longer blocked
         await this.click(this.page.getByRole('dialog').getByRole('heading').first());

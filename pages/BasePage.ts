@@ -142,6 +142,69 @@ export class BasePage {
     }
   }
 
+  // ── Bootstrap Select (Combobox) Helpers ────────────────────────────────────
+
+  /**
+   * Search for and select an option in a Bootstrap Select dropdown.
+   * Scopes the lookup to the specific dropdown container to avoid conflicts
+   * when multiple Selects are on the same page.
+   * 
+   * @param dropdownButton - The locator for the dropdown trigger button
+   * @param searchTerm - The text to type into the search box
+   * @param optionName - The exact or partial name of the option to select (defaults to searchTerm if not provided)
+   */
+  async selectBootstrapOption(dropdownButton: Locator, searchTerm: string, optionName?: string): Promise<void> {
+    await this.click(dropdownButton);
+    
+    // The dropdown structure is <div class="bootstrap-select"> <button/> <div class="dropdown-menu">...</div> </div>
+    // Scope our lookups to the parent container of the clicked button
+    const dropdownContainer = dropdownButton.locator('xpath=..');
+    
+    // Fill the search input that appears inside the opened dropdown container
+    const searchInput = dropdownContainer.getByRole('combobox', { name: 'Search' });
+    if (await searchInput.isVisible().catch(() => false)) {
+        await this.fill(searchInput, searchTerm);
+    } else {
+        // Fallback for global lookup if it's attached elsewhere, but usually it's inside
+        const globalSearch = this.page.getByRole('combobox', { name: 'Search' }).filter({ visible: true }).first();
+        if (await globalSearch.isVisible().catch(() => false)) {
+            await this.fill(globalSearch, searchTerm);
+        }
+    }
+
+    // Target the listbox specifically inside this dropdown (last handles native <select> vs Bootstrap <ul>)
+    const listbox = dropdownContainer.getByRole('listbox').last();
+    
+    // If optionName is provided, use it to match the option. Otherwise use the searchTerm.
+    const expectedName = optionName ? new RegExp(optionName, 'i') : new RegExp(searchTerm, 'i');
+
+    await this.click(listbox.getByRole('option', { name: expectedName }).first());
+  }
+
+  /**
+   * Search for and select multiple options in a Bootstrap Multi-Select dropdown.
+   * Scopes the lookup to the specific dropdown container.
+   * 
+   * @param dropdownButton - The locator for the dropdown trigger button
+   * @param optionsToSelect - Array of option names to select
+   * @param clickOutsideToClose - Locator to click to dismiss the dropdown overlay (optional)
+   */
+  async selectMultipleBootstrapOptions(dropdownButton: Locator, optionsToSelect: string[], clickOutsideToClose?: Locator): Promise<void> {
+    await this.click(dropdownButton);
+    const dropdownContainer = dropdownButton.locator('xpath=..');
+    // .last() is critical: avoids clicking the hidden native <select> options
+    const listbox = dropdownContainer.getByRole('listbox').last();
+
+    for (const option of optionsToSelect) {
+        await this.click(listbox.getByRole('option', { name: new RegExp(option, 'i') }).first());
+    }
+
+    if (clickOutsideToClose) {
+        await this.click(clickOutsideToClose);
+    }
+  }
+
+
   /**
    * Check checkbox or radio button
    */
