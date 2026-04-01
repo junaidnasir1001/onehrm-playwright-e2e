@@ -37,9 +37,9 @@ jobs:
         # Base environment definitions for BasePage instantiation
         QA_BASE_URL: https://v2.onehrm.com.my
         
-        # Test accounts (Using default fallback args from LoginPage if none specified)
-        # TEST_ADMIN_EMAIL: ${{ secrets.TEST_ADMIN_EMAIL }}
-        # TEST_ADMIN_PASSWORD: ${{ secrets.TEST_ADMIN_PASSWORD }}
+        # Test accounts strictly required by LoginPage.ts validation bounds
+        TEST_ADMIN_EMAIL: pukat-admin
+        TEST_ADMIN_PASSWORD: admin@1234
         
         CI: true
         
