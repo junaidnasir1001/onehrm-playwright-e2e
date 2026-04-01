@@ -34,9 +34,13 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test --project=chromium
       env:
-        # If your OneHRM deployment requires authentication tokens or specific base URLs securely, add them in GitHub Secrets
-        # BASE_URL: ${{ secrets.BASE_URL }}
-        # ADMIN_PASS: ${{ secrets.ADMIN_PASSWORD }}
+        # Base environment definitions for BasePage instantiation
+        QA_BASE_URL: https://v2.onehrm.com.my
+        
+        # Test accounts (Using default fallback args from LoginPage if none specified)
+        # TEST_ADMIN_EMAIL: ${{ secrets.TEST_ADMIN_EMAIL }}
+        # TEST_ADMIN_PASSWORD: ${{ secrets.TEST_ADMIN_PASSWORD }}
+        
         CI: true
         
     - name: Upload test results
