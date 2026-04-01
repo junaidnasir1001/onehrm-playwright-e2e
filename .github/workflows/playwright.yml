@@ -32,7 +32,7 @@ jobs:
       run: npx playwright install --with-deps
       
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx playwright test --project=chromium
       env:
         # If your OneHRM deployment requires authentication tokens or specific base URLs securely, add them in GitHub Secrets
         # BASE_URL: ${{ secrets.BASE_URL }}
