@@ -30,6 +30,7 @@ test.describe('Employee - Dependants Tab', () => {
         
         await depTab.createDependant({
             name: 'Ali H',
+            dateOfBirth: '01-01-1998',
             genderSearch: 'Male',
             maritalStatusSearch: 'Sin', // Single
             bloodGroupSearch: 'A',

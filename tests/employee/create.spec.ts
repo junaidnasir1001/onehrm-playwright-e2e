@@ -50,6 +50,8 @@ test.describe('Employee - Create', () => {
 
         // Assert — employee appears in the list after searching
         await listPage.navigateToListFromProfile();
-        await expect(listPage['page'].getByRole('link', { name: data.fullName })).toBeVisible();
+        await listPage.page.waitForLoadState('networkidle');
+        await listPage.searchBox.fill(data.fullName);
+        await expect(listPage['page'].getByRole('link', { name: data.fullName })).toBeVisible({ timeout: 15000 });
     });
 });

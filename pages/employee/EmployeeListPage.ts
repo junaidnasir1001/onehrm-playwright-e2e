@@ -11,7 +11,7 @@ export class EmployeeListPage extends BasePage {
     private readonly employeeListsLink = this.page.getByRole('link', { name: ' Employee Lists' });
 
     // ── Search ────────────────────────────────────────────────────────────────
-    private readonly searchBox = this.page.getByRole('searchbox', { name: 'Search:' });
+    readonly searchBox = this.page.getByRole('searchbox', { name: 'Search:' });
 
     // ── Add ───────────────────────────────────────────────────────────────────
     readonly addEmployeeButton = this.page.getByRole('button', { name: ' Add Employee' });

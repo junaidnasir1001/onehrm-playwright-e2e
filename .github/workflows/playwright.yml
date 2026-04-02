@@ -28,8 +28,19 @@ jobs:
     - name: Install dependencies
       run: npm ci
       
+    - name: Cache Playwright Binaries
+      uses: actions/cache@v4
+      id: playwright-cache
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+        
+    - name: Install OS Dependencies
+      run: npx playwright install-deps chromium
+      
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+      run: npx playwright install chromium
       
     - name: Run Playwright tests
       run: npx playwright test --project=chromium

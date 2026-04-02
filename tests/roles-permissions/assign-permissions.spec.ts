@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pages/LoginPage';
 import { RolesPermissionsPage } from '../../pages/roles-permissions/RolesPermissionsPage';
+import { generateUniqueId } from '../../utils/test-data';
 
 test.describe('Roles & Permissions - Assign Permissions to a Role', () => {
     let loginPage: LoginPage;
@@ -17,7 +18,8 @@ test.describe('Roles & Permissions - Assign Permissions to a Role', () => {
 
     test('admin can assign permissions to a role', async ({ page }) => {
         // Arrange
-        const targetRole = 'Supervisor';
+        const uid = generateUniqueId();
+        const targetRole = `QA Permission Role ${uid}`;
         const permissions = [
             'Organization',
             'Attendances',
@@ -26,6 +28,11 @@ test.describe('Roles & Permissions - Assign Permissions to a Role', () => {
             'Travels',
             'Transfers',
         ];
+
+        // Dynamically spawn the target Role so it forcefully populates at the top of Page 1
+        await rolesPage.createRole(targetRole, 'Dynamically created role for permission assignment test');
+        await expect(rolesPage.successHeading).toBeVisible();
+        await rolesPage.navigateTo(); // Refresh mapping state
 
         // Act — open permissions panel and toggle each permission
         await rolesPage.openPermissionsPanel(targetRole);

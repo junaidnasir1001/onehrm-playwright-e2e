@@ -14,15 +14,17 @@ export class QualificationsTab extends BasePage {
     private readonly tabButton = this.page.getByRole('tab', { name: 'Qualifications' });
     private readonly addButton = this.page.getByRole('button', { name: ' Add Employee Qualification' });
     
-    private readonly instituteInput = this.page.getByRole('textbox', { name: 'Institute/ School/ University' });
-    private readonly educationLevelButton = this.page.locator('#employee-qualification-form button[data-id="education_level_id"]');
+    private readonly addQualificationDialog = this.page.getByRole('dialog').filter({ has: this.page.getByRole('heading', { name: 'Add Employee Qualification' }) });
     
-    private readonly fromToInput = this.page.getByRole('textbox', { name: 'From To' });
-    private readonly majorSubjectInput = this.page.getByRole('textbox', { name: 'Major Subject' });
-    private readonly professionalSkillInput = this.page.getByRole('textbox', { name: 'Professional Skill' });
-    private readonly descInput = this.page.getByRole('textbox', { name: 'Description' });
+    private readonly instituteInput = this.addQualificationDialog.getByRole('textbox', { name: 'Institute/ School/ University' });
+    private readonly educationLevelButton = this.addQualificationDialog.locator('button').filter({ hasText: 'Select Education Level' }).last();
     
-    private readonly submitButton = this.page.locator('#employee-qualification-form').getByRole('button', { name: 'Submit' });
+    private readonly fromToInput = this.addQualificationDialog.getByRole('textbox', { name: 'From To' });
+    private readonly majorSubjectInput = this.addQualificationDialog.getByRole('textbox', { name: 'Major Subject' });
+    private readonly professionalSkillInput = this.addQualificationDialog.getByRole('textbox', { name: 'Professional Skill' });
+    private readonly descInput = this.addQualificationDialog.getByRole('textbox', { name: 'Description' });
+    
+    private readonly submitButton = this.addQualificationDialog.getByRole('button', { name: 'Submit' });
     readonly createdHeading = this.page.getByRole('heading', { name: 'Employee Qualification' });
 
     constructor(page: Page) {
@@ -40,7 +42,7 @@ export class QualificationsTab extends BasePage {
         await this.click(this.addButton);
         
         await this.clearAndFill(this.instituteInput, data.institute);
-        await this.selectBootstrapOption(this.educationLevelButton, data.educationLevelSearch);
+        await this.selectBootstrapOption(this.educationLevelButton, data.educationLevelSearch, data.educationLevelSearch);
         
         await this.clearAndFill(this.fromToInput, data.fromTo);
         await this.clearAndFill(this.majorSubjectInput, data.majorSubject);

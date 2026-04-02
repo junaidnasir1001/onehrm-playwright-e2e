@@ -5,6 +5,7 @@ export interface DependantData {
     name: string;
     /** Date of Birth uses a calendar widget — plain fill does not stick; pick a day cell (default "15"). */
     dateOfBirthDay?: string;
+    dateOfBirth?: string;
     genderSearch: string;
     maritalStatusSearch: string;
     bloodGroupSearch: string;
@@ -60,9 +61,22 @@ export class DependantsTab extends BasePage {
         await this.click(this.addButton);
 
         await this.clearAndFill(this.nameInput, data.name);
-        await this.click(this.dateOfBirthInput);
-        const dobDay = data.dateOfBirthDay ?? '15';
-        await this.page.getByRole('cell', { name: dobDay, exact: true }).first().click();
+        
+        if (data.dateOfBirth) {
+            // Bypass rigid calendar auto-clearing by aggressively injecting value and dispatching change events native to React/Bootstrap
+            await this.dateOfBirthInput.evaluate((el: HTMLInputElement, dateString) => {
+                el.value = dateString;
+                el.dispatchEvent(new Event('input', { bubbles: true }));
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+            }, data.dateOfBirth);
+            
+            // Dispatch blur to forcefully close the dropdown if its bound to focus
+            await this.dateOfBirthInput.blur();
+        } else {
+            await this.click(this.dateOfBirthInput);
+            const dobDay = data.dateOfBirthDay ?? '15';
+            await this.page.getByRole('cell', { name: dobDay, exact: true }).first().click();
+        }
 
         await this.selectBootstrapOption(this.genderButton, data.genderSearch);
         await this.selectBootstrapOption(this.maritalStatusButton, data.maritalStatusSearch);

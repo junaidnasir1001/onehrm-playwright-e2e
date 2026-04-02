@@ -60,7 +60,9 @@ export class RolesPermissionsPage extends BasePage {
      */
     async openPermissionsPanel(roleName: string): Promise<void> {
         const roleRow = this.page.getByRole('row', { name: new RegExp(roleName) });
-        await this.click(roleRow.getByRole('link').nth(1));
+        // Use an aggressive fallback cascade: strictly target permission hrefs or titles before degrading to raw indexing
+        const permissionAction = roleRow.locator('a[href*="permission"]').or(roleRow.locator('[title*="Permission" i]')).or(roleRow.getByRole('link').nth(1)).or(roleRow.getByRole('link').first()).first();
+        await this.click(permissionAction);
         await this.waitForPageLoad();
     }
 
@@ -109,13 +111,20 @@ export class RolesPermissionsPage extends BasePage {
      */
     async selectEmployee(searchTerm: string, employeeName: string): Promise<void> {
         await this.selectBootstrapOption(
-            this.page.getByRole('combobox', { name: 'Select Employee' }),
+            this.page.locator('button').filter({ hasText: /Select Employee/i }).last(),
             searchTerm,
             employeeName
         );
 
-        // Dismiss the open Bootstrap dropdown overlay so Submit is no longer blocked
-        await this.click(this.page.getByRole('dialog').getByRole('heading').first());
+        // Wait for overlay to be dismissible, then close it
+        await this.page.waitForTimeout(300); // Brief pause for DOM to settle
+        const dialog = this.page.getByRole('dialog').first();
+        await dialog.waitFor({ state: 'visible' });
+        const heading = dialog.getByRole('heading').first();
+        await this.click(heading);
+
+        // Ensure overlay is gone before returning
+        await this.page.waitForTimeout(200);
     }
 
     /**
