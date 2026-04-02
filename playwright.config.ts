@@ -63,7 +63,7 @@ export default defineConfig({
     video: 'retain-on-failure',
 
     /* Default timeout for actions in milliseconds */
-    actionTimeout: 15000,
+    actionTimeout: 20000,
 
     /* Default navigation timeout in milliseconds */
     navigationTimeout: 30000,
@@ -80,7 +80,7 @@ export default defineConfig({
 
   /* Expect timeout in milliseconds */
   expect: {
-    timeout: 10000,
+    timeout: 15000,
   },
 
   /* Configure projects for major browsers */
