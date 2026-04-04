@@ -44,6 +44,10 @@ export default defineConfig({
     ['html', { outputFolder: 'playwright-report' }],
     ['json', { outputFile: 'reports/test-results.json' }],
     ['list'],
+    ['@sqaline/playwright-reporter', {
+      apiKey: process.env.SQALINE_API_KEY,
+      apiUrl: process.env.SQALINE_API_URL ?? 'https://api.sqaline.com',
+    }],
     // Add custom reporters here
     // ['@company/custom-reporter', { option: 'value' }],
   ],
