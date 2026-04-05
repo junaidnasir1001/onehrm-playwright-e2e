@@ -49,8 +49,8 @@ jobs:
         QA_BASE_URL: https://v2.onehrm.com.my
         
         # Test accounts strictly required by LoginPage.ts validation bounds
-        TEST_ADMIN_EMAIL: pukat-admin
-        TEST_ADMIN_PASSWORD: admin@1234
+        TEST_ADMIN_EMAIL: ${{ secrets.TEST_ADMIN_EMAIL }}
+        TEST_ADMIN_PASSWORD: ${{ secrets.TEST_ADMIN_PASSWORD }}
         SQALINE_API_KEY: ${{ secrets.SQALINE_API_KEY }}
         SQALINE_API_URL: ${{ secrets.SQALINE_API_URL }}
         

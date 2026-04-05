@@ -46,7 +46,8 @@ Tests are designed around business risk — not technical coverage metrics. Ever
 | Visual Regression | UI consistency across deployments and browsers | 🟡 Medium | 📋 Phase 3 |
 | Performance Benchmarks | Page load thresholds, response time gates | 🟡 Medium | 📋 Phase 4 |
 
-> Full test run history, per-test durations, and flaky test tracking available on the [SQAline dashboard →](https://sqaline.com)
+![SQAline Dashboard — OneHRM](./screenshots/sqaline-dashboard.png)
+*100/100 release confidence · 50 tests · 0 flaky · Built with [SQAline](https://app.sqaline.com)*
 
 ---
 
