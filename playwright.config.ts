@@ -47,6 +47,14 @@ export default defineConfig({
     ['@sqaline/playwright-reporter', {
       apiKey: process.env.SQALINE_API_KEY,
       apiUrl: process.env.SQALINE_API_URL ?? 'https://api.sqaline.com',
+      tags: {
+        'Authentication': ['**/login.spec.ts'],
+        'Employee Profiles': ['**/employee/**/*.spec.ts'],
+        'Roles & Access Control': ['**/roles-permissions/**/*.spec.ts'],
+        'Organization Structure': ['**/organization/**/*.spec.ts'],
+        'Holiday Policies': ['**/holiday-management/**/*.spec.ts'],
+        'Shifts & Scheduling': ['**/office-shifts/**/*.spec.ts'],
+      },
     }],
     // Add custom reporters here
     // ['@company/custom-reporter', { option: 'value' }],
