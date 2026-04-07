@@ -2,7 +2,7 @@ import { Page, Locator } from '@playwright/test';
 import { BasePage } from '../../BasePage';
 
 export interface LeaveTypeData {
-    leaveParentSearch: string;
+    leaveParentSearch?: string;
     name: string;
     description: string;
     toggleIndices?: number[];
@@ -41,11 +41,13 @@ export class LeaveTypesPage extends BasePage {
     async createType(data: LeaveTypeData): Promise<void> {
         await this.click(this.addBtn);
 
-        await this.selectBootstrapOption(
-            this.page.locator('button').filter({ hasText: 'Select Leave Parent' }).last(),
-            data.leaveParentSearch,
-            data.leaveParentSearch
-        );
+        if (data.leaveParentSearch) {
+            await this.selectBootstrapOption(
+                this.page.locator('button').filter({ hasText: 'Select Leave Parent' }).last(),
+                data.leaveParentSearch,
+                data.leaveParentSearch
+            );
+        }
 
         await this.clearAndFill(this.nameInput, data.name);
         

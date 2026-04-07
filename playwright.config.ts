@@ -56,6 +56,7 @@ export default defineConfig({
         'Shifts & Scheduling': ['**/office-shifts/**/*.spec.ts'],
         'Leave Policies': ['**/leave-management/leave-policies/**/*.spec.ts'],
         'Leave Types': ['**/leave-management/leave-types/**/*.spec.ts'],
+        'Leave Allocations': ['**/leave-management/leave-allocations/**/*.spec.ts'],
         'Daily Activities': ['**/daily-activities/**/*.spec.ts'],
       },
     }],
