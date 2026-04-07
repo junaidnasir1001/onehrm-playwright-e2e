@@ -57,6 +57,7 @@ export default defineConfig({
         'Leave Policies': ['**/leave-management/leave-policies/**/*.spec.ts'],
         'Leave Types': ['**/leave-management/leave-types/**/*.spec.ts'],
         'Leave Allocations': ['**/leave-management/leave-allocations/**/*.spec.ts'],
+        'Leave Applications': ['**/leave-management/leave-applications/**/*.spec.ts'],
         'Daily Activities': ['**/daily-activities/**/*.spec.ts'],
       },
     }],
