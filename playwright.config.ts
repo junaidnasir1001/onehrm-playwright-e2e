@@ -55,6 +55,7 @@ export default defineConfig({
         'Holiday Policies': ['**/holiday-management/**/*.spec.ts'],
         'Shifts & Scheduling': ['**/office-shifts/**/*.spec.ts'],
         'Leave Policies': ['**/leave-management/leave-policies/**/*.spec.ts'],
+        'Leave Types': ['**/leave-management/leave-types/**/*.spec.ts'],
         'Daily Activities': ['**/daily-activities/**/*.spec.ts'],
       },
     }],
