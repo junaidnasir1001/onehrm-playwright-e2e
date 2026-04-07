@@ -54,6 +54,8 @@ export default defineConfig({
         'Organization Structure': ['**/organization/**/*.spec.ts'],
         'Holiday Policies': ['**/holiday-management/**/*.spec.ts'],
         'Shifts & Scheduling': ['**/office-shifts/**/*.spec.ts'],
+        'Leave Policies': ['**/leave-management/leave-policies/**/*.spec.ts'],
+        'Daily Activities': ['**/daily-activities/**/*.spec.ts'],
       },
     }],
     // Add custom reporters here
