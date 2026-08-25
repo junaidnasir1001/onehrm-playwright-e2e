@@ -1,31 +1,27 @@
 # Playwright Automation Framework
 
-![CI](https://github.com/junaidnasir1001/onehrm-playwright-e2e/actions/workflows/test.yml/badge.svg)
-![Tests](https://img.shields.io/badge/tests-50%20passing-brightgreen)
-![Pass Rate](https://img.shields.io/badge/pass%20rate-100%25-brightgreen)
-![SQAline Score](https://img.shields.io/badge/SQAline-100%2F100-brightgreen)
-
 A production-ready Playwright automation framework with Page Object Model, Smart Page Objects, role-based testing, and CI/CD integration — built and battle-tested on a live enterprise HRM system.
 
 ---
 
 ## ✅ Proven in Production
 
-This framework is not a demo. It powers the live test suite for **OneHRM** — an enterprise HR management system handling payroll, salary deductions, and employee financial records for real organisations.
+This framework is not a demo. It was built for **OneHRM** — an enterprise HR management system handling payroll, salary deductions and employee financial records for real organizations. 
+Not a tutorial project: it ran against a live product, under production constraints, with real releases depending on it.
+
+**Results at handover:**
 
 | Metric | Result |
 |---|---|
 | E2E tests automated | **50 tests** |
-| Pass rate (all branches) | **100%** |
 | Full CI pipeline runtime | **~17 minutes** |
-| Flaky tests | **0** |
-| Release confidence score | **100 / 100 (SQAline)** |
-| Estimated CI waste per week | **$0** |
 | Manual QA cycle eliminated | **2 weeks → fully automated** |
 
-Before this framework, every release required 2 weeks of manual regression testing — and bugs still reached production. Now every push to `main` is validated in under 17 minutes with a verified confidence score before any release decision is made.
+*I no longer work on OneHRM and no longer have access to that environment, so the
+CI pipeline in this repository does not run against it. What's here is the framework
+itself — complete, documented, and ready to point at your own application.*
 
-> 📊 [View live SQAline dashboard →](https://sqaline.com) — real-time release confidence per commit
+Before this framework, every release required 2 weeks of manual regression testing — and bugs still reached production. By handover, every push to `main` was validated in under 17 minutes before any release decision was made.
 
 ---
 
@@ -33,51 +29,50 @@ Before this framework, every release required 2 weeks of manual regression testi
 
 Tests are designed around business risk — not technical coverage metrics. Every critical flow that could cost the business money, trust, or compliance is protected first.
 
-| Business Risk Area | What's Protected | Risk Level | Status |
-|---|---|---|---|
-| Payroll & Salary | Additions, deductions, salary setup, loans, overtime, e-wallet | 🔴 Critical | ✅ Covered |
-| Access Control | Role creation, permission assignment, role-to-employee mapping | 🔴 Critical | ✅ Covered |
-| Authentication | Login flows, session handling, credential validation | 🔴 Critical | ✅ Covered |
-| Employee Records | Profile creation, documents, dependants, qualifications, bank accounts | 🟠 High | ✅ Covered |
-| Org Structure | Company, branch, department, designation, company policy | 🟠 High | ✅ Covered |
-| Leave & Attendance | Holiday calendars, holiday entries, office shift management | 🟡 Medium | ✅ Covered |
-| Internal Comms | Announcements — create, edit, delete | 🟡 Medium | ✅ Covered |
-| API Layer | Backend validation, response integrity, schema checking | 🟠 High | 🔄 Phase 2 |
-| Visual Regression | UI consistency across deployments and browsers | 🟡 Medium | 📋 Phase 3 |
-| Performance Benchmarks | Page load thresholds, response time gates | 🟡 Medium | 📋 Phase 4 |
+| Business Risk Area | What's Protected | Risk Level |
+|---|---|---|
+| Payroll & Salary | Additions, deductions, salary setup, loans, overtime, e-wallet | 🔴 Critical |
+| Access Control | Role creation, permission assignment, role-to-employee mapping | 🔴 Critical |
+| Authentication | Login flows, session handling, credential validation | 🔴 Critical |
+| Employee Records | Profiles, documents, dependants, qualifications, bank accounts | 🟠 High |
+| Org Structure | Company, branch, department, designation, company policy | 🟠 High |
+| Leave & Attendance | Holiday calendars, holiday entries, office shift management | 🟡 Medium |
+| Internal Comms | Announcements — create, edit, delete | 🟡 Medium |
 
-![SQAline Dashboard — OneHRM](./screenshots/sqaline-dashboard.png)
-*100/100 release confidence · 50 tests · 0 flaky · Built with [SQAline](https://app.sqaline.com)*
+**Not covered:** API-layer validation, visual regression and performance benchmarks were
+scoped but never built. Naming the gaps matters as much as naming the coverage — a suite
+that reports everything green is the one you shouldn't trust.
+
+## Release confidence scoring
+
+While building this suite I kept wanting one number that answered "is this release safe to ship" — pass/fail logs don't. So I built one: **SQAline**, a tool that scores release confidence per commit rather than just listing results. It's my own product, still early.
+This project is where the idea came from.
+
+Reporter on npm: [`@sqaline/playwright-reporter`](https://www.npmjs.com/package/@sqaline/playwright-reporter) · Product: [sqaline.com](https://app.sqaline.com)
+
+![SQAline dashboard](./screenshots/sqaline-dashboard.png)
+*SQAline scoring this project's runs. Self-issued — my own tool, not third-party validation.*
 
 ---
 
-## 🗺️ Roadmap
+## Where I'd take this next
 
-This framework is actively maintained and expanding. Each phase follows the same principle: protect the highest business risk areas first.
+The suite covered the highest-risk flows first. These are the next layers, in the order
+I'd build them:
 
-### ✅ Phase 1 — Core HR Flows (Complete)
-- 50 E2E tests covering payroll, employee management, org structure, access control, and leave management
-- GitHub Actions CI pipeline running on every push to `main`
-- SQAline integration delivering a 100/100 confidence score
-- Zero flaky tests, zero failed runs in production
+1. **API-layer validation** — salary computation checked against expected outputs, response
+   schema checking. A UI test confirms the screen rendered; only an API assertion confirms
+   the maths.
+2. **Multi-role scenarios** — admin vs manager vs employee as a matrix rather than
+   separate specs.
+3. **Cross-browser** — Firefox and WebKit alongside Chromium.
+4. **Visual regression on critical pages** — payslip and dashboard first, where a layout
+   break becomes a support ticket.
+5. **PR-level gates** — block a merge below a confidence threshold instead of reporting
+   after the fact.
 
-### 🔄 Phase 2 — API Layer & Extended Payroll (In Progress)
-- Salary computation validation against expected outputs
-- API response integrity and schema checking
-- Multi-role test scenarios (admin vs employee vs manager)
-- Cross-browser coverage: Firefox and WebKit alongside Chromium
-
-### 📋 Phase 3 — Visual Regression & Accessibility (Planned)
-- Pixel-by-pixel UI regression on critical pages
-- Baseline management for intentional UI updates
-- Mobile viewport coverage
-- Accessibility checks on core flows
-
-### 📋 Phase 4 — Full Release Intelligence (Planned)
-- PR-level confidence scores before merge
-- Automated release gates blocking deploys below threshold
-- Flaky test trend analysis and auto-retry logic
-- Team-wide SQAline reporting dashboard
+Ordering principle throughout: protect what costs money or trust first. Chase coverage
+percentages never.
 
 ---
 
@@ -134,6 +129,8 @@ npm run test:codegen
 
 ---
 
+These are capabilities the framework provides. Not all of them were enabled on the OneHRM suite — see Business Risk Coverage above for what actually ran in production.
+
 ## ✨ Features
 
 ### Built-in Reliability
@@ -163,6 +160,9 @@ npm run test:codegen
 - **Multi-Browser Matrix** — test on Chromium, Firefox, and WebKit
 - **SQAline Integration** — confidence score per commit, not just raw pass/fail logs
 - **Artifact Upload** — automatic upload of test results and screenshots on failure
+
+**Not covered on this project:** API-layer validation, visual regression and performance gates. The framework supports the first two — they were never switched on for this suite. Naming the gaps matters as much as naming the coverage: a suite that reports everything
+green is the one you shouldn't trust.
 
 ---
 
@@ -386,12 +386,14 @@ API_KEY=your-key
 
 ## 👋 About
 
-Built by **Junaid Nasir** — QA Automation Engineer specialising in Playwright, GitHub Actions CI/CD, and release confidence tooling for production systems.
+Built by **Junaid Nasir** — QA automation engineer working in Playwright, GitHub Actions CI/CD, and release-confidence tooling for production systems.
 
-This framework is the same foundation that eliminated a 2-week manual QA cycle for a live enterprise HRM system — delivering **50 automated E2E tests across every critical business flow**, a **100% pass rate**, and a **100/100 SQAline release confidence score** from the first production run.
+This framework is the foundation that replaced a two-week manual regression cycle on a live enterprise HRM system with 50 automated E2E tests across its critical business flows.
 
-**Open to freelance projects — Playwright automation, CI/CD setup, QA strategy:**
+I build automation as a QA engineer — so it's actually tested. If your team is shipping behind a manual regression pass, or sitting on a suite nobody trusts any more, I'm happy to take a look. **Open to freelance projects — Playwright automation, CI/CD setup, QA strategy:**
+
 - 🔗 [Upwork Profile](https://www.upwork.com/freelancers/junaidnasir)
+- 🔗 [sqaline.com](https://sqaline.com) — QA automation services
 - 📊 [SQAline — Release Copilot](https://sqaline.com)
 - 🐙 [GitHub](https://github.com/junaidnasir1001)
 
