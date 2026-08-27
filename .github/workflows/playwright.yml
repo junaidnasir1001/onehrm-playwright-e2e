@@ -1,67 +1,65 @@
-name: Playwright Demo CI
+name: Playwright E2E Tests
 
 on:
   push:
-    branches: [main]
+    branches: [ main, master ]
   pull_request:
-    branches: [main]
+    branches: [ main, master ]
+  schedule:
+    # Run a nightly build at midnight UTC to verify framework stability
+    - cron: '0 0 * * *'
   workflow_dispatch:
-
-permissions:
-  contents: read
+    # Allows manual triggering from the GitHub Actions UI
 
 jobs:
   test:
-    name: Public demo tests
+    timeout-minutes: 60
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
+    
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
-
-      - name: Start The Internet
-        run: |
-          docker compose up --detach
-          if ! ./scripts/wait-for-the-internet.sh; then
-            docker compose logs --no-color
-            exit 1
-          fi
-
-      - name: Run public demo tests
-        run: npm run test:demo
-        env:
-          BASE_URL: http://127.0.0.1:7080
-          CI: true
-
-      - name: Upload Playwright artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: |
-            playwright-report/
-            test-results/
-            reports/demo-results.json
-          if-no-files-found: ignore
-          retention-days: 14
-
-      - name: Show application logs on failure
-        if: failure()
-        run: docker compose logs --no-color
-
-      - name: Stop The Internet
-        if: always()
-        run: docker compose down
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Cache Playwright Binaries
+      uses: actions/cache@v4
+      id: playwright-cache
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+        
+    - name: Install OS Dependencies
+      run: npx playwright install-deps chromium
+      
+    - name: Install Playwright Browsers
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+      run: npx playwright install chromium
+      
+    - name: Run Playwright tests
+      run: npx playwright test --project=chromium
+      env:
+        # Base environment definitions for BasePage instantiation
+        QA_BASE_URL: https://v2.onehrm.com.my
+        
+        # Test accounts strictly required by LoginPage.ts validation bounds
+        TEST_ADMIN_EMAIL: ${{ secrets.TEST_ADMIN_EMAIL }}
+        TEST_ADMIN_PASSWORD: ${{ secrets.TEST_ADMIN_PASSWORD }}
+        SQALINE_API_KEY: ${{ secrets.SQALINE_API_KEY }}
+        SQALINE_API_URL: ${{ secrets.SQALINE_API_URL }}
+        
+        CI: true
+        
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 14
