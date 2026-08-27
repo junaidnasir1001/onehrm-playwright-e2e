@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
+    "test:demo": "playwright test --config=playwright.demo.config.ts",
     "test:examples": "playwright test tests/examples",
     "test:verification": "playwright test tests/framework-verification.spec.ts",
     "test:headed": "playwright test --headed",
@@ -12,6 +13,9 @@
     "test:debug": "playwright test --debug",
     "test:report": "playwright show-report",
     "test:codegen": "playwright codegen",
+    "demo:up": "docker compose up --detach --wait",
+    "demo:wait": "./scripts/wait-for-the-internet.sh",
+    "demo:down": "docker compose down",
     "mcp:start": "npx @playwright/mcp@latest",
     "mcp:debug": "npx @playwright/mcp@latest --debug",
     "report:generate": "ts-node scripts/generate-report.ts",
